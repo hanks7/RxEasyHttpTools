@@ -71,7 +71,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MainActivity extends BaseActivity {
 
-    public static final String URL = "http://172.16.1.132:8080/jdbc/Servlet1";
+    public static final String URL = "/v1/app/chairdressing/skinAnalyzePower/skinTestResult";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +139,10 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(TestBean response) {
-                        if (response != null) showToast(response.toString());
+                        if (response != null)
+                            showToast(response.getMessage());
+                            showToast(response.getData().getCustomers().get(0).toString());
+                            showToast(response.toString());
                     }
                 });
     }

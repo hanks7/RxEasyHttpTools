@@ -79,6 +79,16 @@ public class TestBean implements Serializable {
         }
 
         public static class CustomersBean {
+            @Override
+            public String toString() {
+                return "CustomersBean{" +
+                        "id=" + id +
+                        ", name='" + name + '\'' +
+                        ", phone='" + phone + '\'' +
+                        ", email='" + email + '\'' +
+                        '}';
+            }
+
             /**
              * id : 1
              * name : houjianjun
