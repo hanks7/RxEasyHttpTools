@@ -29,7 +29,7 @@ import com.zhouyou.http.cache.model.CacheMode;
 import com.zhouyou.http.cache.model.CacheResult;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.demo.base.BaseActivity;
-import com.zhouyou.http.demo.model.SkinTestResult;
+import com.zhouyou.http.demo.model.TestBean;
 import com.zhouyou.http.exception.ApiException;
 import com.zhouyou.http.subsciber.BaseSubscriber;
 import com.zhouyou.http.utils.HttpLog;
@@ -98,9 +98,9 @@ public class CacheActivity extends BaseActivity implements View.OnClickListener 
 
     /**
      * 回调支持：<br>
-     * new SimpleCallBack<CacheResult<SkinTestResult>>()<br>
+     * new SimpleCallBack<CacheResult<TestBean>>()<br>
      * new SimpleCallBack<CacheResult<String>>()<br>
-     * new SimpleCallBack<SkinTestResult>()//不返回CacheResult 直接返回内容<br>
+     * new SimpleCallBack<TestBean>()//不返回CacheResult 直接返回内容<br>
      * new SimpleCallBack<String>()//返回字符串<br>
      */
     private void requestCahce() {
@@ -114,7 +114,7 @@ public class CacheActivity extends BaseActivity implements View.OnClickListener 
                 //.cacheDiskConverter(new GsonDiskConverter())//默认使用的是 new SerializableDiskConverter();
                 .cacheDiskConverter(new SerializableDiskConverter())//默认使用的是 new SerializableDiskConverter();
                 .timeStamp(true)
-                .execute(new SimpleCallBack<CacheResult<SkinTestResult>>() {
+                .execute(new SimpleCallBack<CacheResult<TestBean>>() {
 
                     @Override
                     public void onError(ApiException e) {
@@ -122,7 +122,7 @@ public class CacheActivity extends BaseActivity implements View.OnClickListener 
                     }
 
                     @Override
-                    public void onSuccess(CacheResult<SkinTestResult> cacheResult) {
+                    public void onSuccess(CacheResult<TestBean> cacheResult) {
                         HttpLog.i(cacheResult.toString());
                         String from;
                         if (cacheResult.isFromCache) {
@@ -143,10 +143,10 @@ public class CacheActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 可以使用但是目前不能标记缓存来源<br>
      * 支持：<br>
-     * execute(SkinTestResult.class)<br>
+     * execute(TestBean.class)<br>
      * execute(String.class)<br>
      * 不支持：<br>
-     * execute(CacheResult<SkinTestResult> clazz)<br>
+     * execute(CacheResult<TestBean> clazz)<br>
      */
     private void requestCahce2() {
         EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
@@ -158,15 +158,15 @@ public class CacheActivity extends BaseActivity implements View.OnClickListener 
                 //.cacheDiskConverter(new GsonDiskConverter())//默认使用的是 new SerializableDiskConverter();
                 .cacheDiskConverter(new SerializableDiskConverter())//默认使用的是 new SerializableDiskConverter();
                 .timeStamp(true)
-                .execute(SkinTestResult.class)
-                .subscribe(new Observer<SkinTestResult>() {
+                .execute(TestBean.class)
+                .subscribe(new Observer<TestBean>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull SkinTestResult skinTestResult) {
+                    public void onNext(@NonNull TestBean skinTestResult) {
                         showToast(skinTestResult.toString());
                     }
 
@@ -200,22 +200,22 @@ public class CacheActivity extends BaseActivity implements View.OnClickListener 
      * 根据key获取缓存
      */
     public void onLoadCache(View view) {
-        Observable<SkinTestResult> observable = EasyHttp.getRxCacheBuilder()
+        Observable<TestBean> observable = EasyHttp.getRxCacheBuilder()
                 //获取缓存需要指定下转换器，默认就是SerializableDiskConverter 这里可以不用写
                 //就是你网络请求用哪个转换器存储的缓存，那么读取时也要采用对应的转换器读取
                 .diskConverter(new SerializableDiskConverter()).build()
                  //这个表示读取缓存根据时间,读取指定时间内的缓存，例如读取:5*60s之内的缓存
-                //.load(new TypeToken<SkinTestResult>() {}.getType(), this.getClass().getSimpleName(), 5 * 60)
+                //.load(new TypeToken<TestBean>() {}.getType(), this.getClass().getSimpleName(), 5 * 60)
                  //这个表示读取缓存不根据时间只要有缓存就读取
-                .load(new TypeToken<SkinTestResult>() {}.getType(), this.getClass().getSimpleName());
-        observable.subscribe(new BaseSubscriber<SkinTestResult>() {
+                .load(new TypeToken<TestBean>() {}.getType(), this.getClass().getSimpleName());
+        observable.subscribe(new BaseSubscriber<TestBean>() {
             @Override
             public void onError(ApiException e) {
                 showToast("获取缓存失败:" + e.getMessage());
             }
 
             @Override
-            public void onNext(SkinTestResult s) {
+            public void onNext(TestBean s) {
                 showToast("获取缓存成功:" + s.toString());
             }
         });

@@ -41,7 +41,7 @@ import com.zhouyou.http.demo.customapi.test5.TestApiResult5;
 import com.zhouyou.http.demo.model.ApiInfo;
 import com.zhouyou.http.demo.model.AuthModel;
 import com.zhouyou.http.demo.model.SectionItem;
-import com.zhouyou.http.demo.model.SkinTestResult;
+import com.zhouyou.http.demo.model.TestBean;
 import com.zhouyou.http.demo.utils.FileUtils;
 import com.zhouyou.http.demo.utils.MD5;
 import com.zhouyou.http.exception.ApiException;
@@ -71,7 +71,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MainActivity extends BaseActivity {
 
-    public static final String URL = "/v1/app/chairdressing/skinAnalyzePower/skinTestResult";
+    public static final String URL = "http://172.16.1.132:8080/jdbc/Servlet1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onGet(View view) {
-        EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
+        EasyHttp.get(URL)
                 .readTimeOut(30 * 1000)//局部定义读超时 ,可以不用定义
                 .writeTimeOut(30 * 1000)
                 .connectTimeout(30 * 1000)
@@ -131,28 +131,17 @@ public class MainActivity extends BaseActivity {
                 //.addConverterFactory()
                 //.addCookie()
                 .timeStamp(true)
-                .execute(new SimpleCallBack<SkinTestResult>() {
+                .execute(new SimpleCallBack<TestBean>() {
                     @Override
                     public void onError(ApiException e) {
                         showToast(e.getMessage());
                     }
 
                     @Override
-                    public void onSuccess(SkinTestResult response) {
+                    public void onSuccess(TestBean response) {
                         if (response != null) showToast(response.toString());
                     }
                 });
-               /* .execute(new SimpleCallBack<String>() {
-                    @Override
-                    public void onError(ApiException e) {
-                        showToast(e.getMessage());
-                    }
-
-                    @Override
-                    public void onSuccess(String response) {
-                        if (response != null) showToast(response.toString());
-                    }
-                });*/
     }
 
     /**
@@ -272,10 +261,10 @@ public class MainActivity extends BaseActivity {
      * 基础回调
      */
     public void onCallBack(View view) {
-        //支持CallBack<SkinTestResult>、CallBack<String>回调
+        //支持CallBack<TestBean>、CallBack<String>回调
         Disposable mDisposable = EasyHttp.get(URL)
                 .timeStamp(true)
-                .execute(new CallBack<SkinTestResult>() {
+                .execute(new CallBack<TestBean>() {
                     @Override
                     public void onStart() {
                         showToast("开始请求");
@@ -292,7 +281,7 @@ public class MainActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(SkinTestResult response) {
+                    public void onSuccess(TestBean response) {
                         showToast("请求成功：" + response.toString());
                     }
                 });
@@ -304,17 +293,17 @@ public class MainActivity extends BaseActivity {
      * @param view
      */
     public void onSimpleCallBack(View view) {
-        //支持SimpleCallBack<SkinTestResult>、SimpleCallBack<String>回调
+        //支持SimpleCallBack<TestBean>、SimpleCallBack<String>回调
         EasyHttp.get(URL)
                 .timeStamp(true)
-                .execute(new SimpleCallBack<SkinTestResult>() {
+                .execute(new SimpleCallBack<TestBean>() {
                     @Override
                     public void onError(ApiException e) {
                         showToast(e.getMessage());
                     }
 
                     @Override
-                    public void onSuccess(SkinTestResult response) {
+                    public void onSuccess(TestBean response) {
                         showToast(response.toString());
                     }
                 });
@@ -335,7 +324,7 @@ public class MainActivity extends BaseActivity {
     public void onProgressDialogCallBack(View view) {
         EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
                 .timeStamp(true)
-                .execute(new ProgressDialogCallBack<SkinTestResult>(mProgressDialog, true, true) {
+                .execute(new ProgressDialogCallBack<TestBean>(mProgressDialog, true, true) {
                     @Override
                     public void onError(ApiException e) {
                         super.onError(e);//super.onError(e)必须写不能删掉或者忘记了
@@ -343,7 +332,7 @@ public class MainActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(SkinTestResult response) {
+                    public void onSuccess(TestBean response) {
                         showToast(response.toString());
                     }
                 });
@@ -356,7 +345,7 @@ public class MainActivity extends BaseActivity {
     public void onSubscription(View view) {
         Disposable disposable = EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
                 .timeStamp(true)
-                .execute(new SimpleCallBack<SkinTestResult>() {
+                .execute(new SimpleCallBack<TestBean>() {
 
                     @Override
                     public void onError(ApiException e) {
@@ -364,7 +353,7 @@ public class MainActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(SkinTestResult response) {
+                    public void onSuccess(TestBean response) {
                         showToast(response.toString());
                     }
                 });
@@ -378,18 +367,18 @@ public class MainActivity extends BaseActivity {
      * 本例不讲怎么结合简单订阅下输出结果，结合需要看具体场景
      */
     public void onObservable(View view) {
-        Observable<SkinTestResult> observable = EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
+        Observable<TestBean> observable = EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
                 .timeStamp(true)
-                .execute(SkinTestResult.class);
+                .execute(TestBean.class);
 
-        observable.subscribe(new BaseSubscriber<SkinTestResult>() {
+        observable.subscribe(new BaseSubscriber<TestBean>() {
             @Override
             public void onError(ApiException e) {
                 showToast(e.getMessage());
             }
 
             @Override
-            public void onNext(SkinTestResult skinTestResult) {
+            public void onNext(TestBean skinTestResult) {
                 showToast(skinTestResult.toString());
             }
         });
@@ -399,11 +388,11 @@ public class MainActivity extends BaseActivity {
      * 带有进度框的订阅者，对话框消失，可以自动取消掉网络请求
      */
     public void onProgressSubscriber(View view) {
-        Observable<SkinTestResult> observable = EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
+        Observable<TestBean> observable = EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
                 .timeStamp(true)
-                .execute(SkinTestResult.class);
+                .execute(TestBean.class);
 
-        observable.subscribe(new ProgressSubscriber<SkinTestResult>(this, mProgressDialog) {
+        observable.subscribe(new ProgressSubscriber<TestBean>(this, mProgressDialog) {
             @Override
             public void onError(ApiException e) {
                 super.onError(e);
@@ -411,7 +400,7 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onNext(SkinTestResult skinTestResult) {
+            public void onNext(TestBean skinTestResult) {
                 showToast(skinTestResult.toString());
             }
         });
@@ -448,7 +437,7 @@ public class MainActivity extends BaseActivity {
                         .connectTimeout(30 * 1000)
                         .timeStamp(true)
                         .syncRequest(true)//设置同步请求
-                        .execute(new SimpleCallBack<SkinTestResult>() {
+                        .execute(new SimpleCallBack<TestBean>() {
                             @Override
                             public void onError(final ApiException e) {
                                 mHandler.post(new Runnable() {
@@ -460,7 +449,7 @@ public class MainActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onSuccess(final SkinTestResult response) {
+                            public void onSuccess(final TestBean response) {
                                 mHandler.post(new Runnable() {//异步 Toast
                                     @Override
                                     public void run() {
@@ -481,7 +470,7 @@ public class MainActivity extends BaseActivity {
                         .connectTimeout(30 * 1000)
                         .syncRequest(true)//设置同步请求
                         .timeStamp(true)
-                        .execute(new SimpleCallBack<SkinTestResult>() {
+                        .execute(new SimpleCallBack<TestBean>() {
                             @Override
                             public void onError(final ApiException e) {
                                 mHandler.post(new Runnable() {
@@ -493,7 +482,7 @@ public class MainActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onSuccess(final SkinTestResult response) {
+                            public void onSuccess(final TestBean response) {
                                 mHandler.post(new Runnable() {//异步 Toast
                                     @Override
                                     public void run() {

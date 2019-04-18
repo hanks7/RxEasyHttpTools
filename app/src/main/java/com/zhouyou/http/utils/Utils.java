@@ -216,11 +216,11 @@ public class Utils {
         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
         Type type = params[0];
         Type finalNeedType;
-        if (params.length > 1) {//这个类似是：CacheResult<SkinTestResult> 2层
+        if (params.length > 1) {//这个类似是：CacheResult<TestBean> 2层
             if (!(type instanceof ParameterizedType)) throw new IllegalStateException("没有填写泛型参数");
             finalNeedType = ((ParameterizedType) type).getActualTypeArguments()[0];
             //Type rawType = ((ParameterizedType) type).getRawType();
-        } else {//这个类似是:SkinTestResult  1层
+        } else {//这个类似是:TestBean  1层
             finalNeedType = type;
         }
         return finalNeedType;

@@ -22,7 +22,7 @@ import com.zhouyou.http.demo.customapi.test6.Content;
 import com.zhouyou.http.demo.customapi.test6.TestApiResult6;
 import com.zhouyou.http.demo.model.AuthModel;
 import com.zhouyou.http.demo.model.SectionItem;
-import com.zhouyou.http.demo.model.SkinTestResult;
+import com.zhouyou.http.demo.model.TestBean;
 import com.zhouyou.http.demo.utils.MD5;
 import com.zhouyou.http.exception.ApiException;
 import com.zhouyou.http.subsciber.BaseSubscriber;
@@ -67,15 +67,15 @@ public class SceneActivity extends BaseActivity {
     public void onDeferredRequest(View view) {
         showToast("开启定时");
         //延迟5s请求
-        Observable.timer(5, TimeUnit.SECONDS).flatMap(new Function<Long, ObservableSource<SkinTestResult>>() {
+        Observable.timer(5, TimeUnit.SECONDS).flatMap(new Function<Long, ObservableSource<TestBean>>() {
             @Override
-            public ObservableSource<SkinTestResult> apply(@NonNull Long aLong) throws Exception {
+            public ObservableSource<TestBean> apply(@NonNull Long aLong) throws Exception {
                 Log.i("test", "=====" + aLong);
                 return EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
                         .timeStamp(true)
-                        .execute(SkinTestResult.class);
+                        .execute(TestBean.class);
             }
-        }).subscribe(new BaseSubscriber<SkinTestResult>() {
+        }).subscribe(new BaseSubscriber<TestBean>() {
             @Override
             protected void onStart() {
                 showToast("定时结束->开始请求");
@@ -87,7 +87,7 @@ public class SceneActivity extends BaseActivity {
             }
 
             @Override
-            public void onNext(@NonNull SkinTestResult skinTestResult) {
+            public void onNext(@NonNull TestBean skinTestResult) {
                 showToast(skinTestResult.toString());
             }
         });
@@ -107,15 +107,15 @@ public class SceneActivity extends BaseActivity {
                 .params(ComParamContact.Login.PASSWORD, MD5.encrypt4login("123456", AppConstant.APP_SECRET))
                 .sign(true)
                 .timeStamp(true).execute(AuthModel.class);
-        login.flatMap(new Function<AuthModel, ObservableSource<SkinTestResult>>() {
+        login.flatMap(new Function<AuthModel, ObservableSource<TestBean>>() {
             @Override
-            public ObservableSource<SkinTestResult> apply(@NonNull AuthModel authModel) throws Exception {
+            public ObservableSource<TestBean> apply(@NonNull AuthModel authModel) throws Exception {
                 return EasyHttp.get("/v1/app/chairdressing/skinAnalyzePower/skinTestResult")
                         .params("accessToken", authModel.getAccessToken())//这个地方只是举例，并不一定是需要accessToken
                         .timeStamp(true)
-                        .execute(SkinTestResult.class);
+                        .execute(TestBean.class);
             }
-        }).subscribe(new ProgressSubscriber<SkinTestResult>(this, mProgressDialog) {
+        }).subscribe(new ProgressSubscriber<TestBean>(this, mProgressDialog) {
             @Override
             public void onError(ApiException e) {
                 super.onError(e);
@@ -123,7 +123,7 @@ public class SceneActivity extends BaseActivity {
             }
 
             @Override
-            public void onNext(SkinTestResult skinTestResult) {
+            public void onNext(TestBean skinTestResult) {
                 showToast(skinTestResult.toString());
             }
         });
